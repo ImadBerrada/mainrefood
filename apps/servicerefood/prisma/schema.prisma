@@ -1,0 +1,75 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  address      String?
+  createdAt    DateTime @default(now())
+  email        String?  @unique
+  firstName    String?
+  id           String   @id @default(cuid())
+  lastName     String?
+  orders       Order[]
+  password     String
+  phoneNumber  String?
+  preferences  Json?
+  referralCode Int?
+  role         String?
+  roles        Json
+  socialMedia  String?
+  updatedAt    DateTime @updatedAt
+  username     String   @unique
+}
+
+model Restaurant {
+  analyticsData String?
+  createdAt     DateTime @default(now())
+  cuisine       String?
+  id            String   @id @default(cuid())
+  location      String?
+  menuSchedule  String?
+  name          String?
+  openingHours  String?
+  phoneNumber   String?
+  promotions    String?
+  updatedAt     DateTime @updatedAt
+}
+
+model Meal {
+  category        String?
+  createdAt       DateTime  @default(now())
+  description     String?
+  expiryDate      DateTime?
+  id              String    @id @default(cuid())
+  ingredients     String?
+  isAvailable     Boolean?
+  name            String?
+  nutritionalInfo String?
+  orders          Order[]
+  price           Float?
+  tags            String?
+  updatedAt       DateTime  @updatedAt
+}
+
+model Order {
+  createdAt     DateTime  @default(now())
+  customization String?
+  id            String    @id @default(cuid())
+  meal          Meal?     @relation(fields: [mealId], references: [id])
+  mealId        String?
+  mealId        Int?
+  orderDate     DateTime?
+  pickupTime    DateTime?
+  status        String?
+  totalAmount   Float?
+  trackingInfo  String?
+  updatedAt     DateTime  @updatedAt
+  user          User?     @relation(fields: [userId], references: [id])
+  userId        String?
+  userId        Int?
+}
